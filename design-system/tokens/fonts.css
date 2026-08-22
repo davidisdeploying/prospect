@@ -1,0 +1,9 @@
+/* ============================================================
+   Prospect — Webfonts
+   Free-tier families specified in the brand doctrine:
+   Zilla Slab (display) · Inter (body) · JetBrains Mono (metrics).
+   Premium swaps held in reserve: Roslindale/Domaine for display,
+   Söhne for body, Spline Sans Mono for metrics.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');

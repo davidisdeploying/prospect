@@ -1,0 +1,21 @@
+[Unit]
+Description=Prospect job-application tracker
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/prospect
+ExecStart=/usr/bin/node %h/prospect/server/index.js
+Environment=PORT=8787
+Environment=PROSPECT_EMBEDDINGS=1
+Environment=PROSPECT_LLM_PARSE=1
+Environment=PROSPECT_SKILL_EXTRACT=1
+Environment=PROSPECT_ADVISOR=1
+Environment=PROSPECT_ACCESS_PROXY_PEERS=127.0.0.1
+Restart=always
+RestartSec=3
+StandardOutput=append:%h/prospect/server.log
+StandardError=append:%h/prospect/server.log
+
+[Install]
+WantedBy=default.target

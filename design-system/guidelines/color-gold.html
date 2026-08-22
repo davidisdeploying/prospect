@@ -1,0 +1,21 @@
+<!-- @dsCard group="Colors" viewport="700x150" name="Placer Gold — the scarce accent" subtitle="One gold per view. Reserved for the single most valuable thing." -->
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../styles.css">
+<style>
+  body{margin:0;background:var(--bg-base);padding:22px;font-family:var(--font-sans)}
+  .row{display:flex;gap:14px}
+  .sw{flex:1;border-radius:var(--r-md);height:96px;border:1px solid var(--line);
+      display:flex;flex-direction:column;justify-content:flex-end;padding:10px;position:relative}
+  .name{font-family:var(--font-sans);font-weight:600;font-size:12px;color:var(--text-on-gold)}
+  .hex{font-family:var(--font-mono);font-size:11px;color:var(--text-on-gold);opacity:.75}
+  .dark .name{color:var(--quartz)} .dark .hex{color:var(--quartz);opacity:.6}
+</style></head>
+<body>
+  <div class="row">
+    <div class="sw" style="background:var(--gold-hi)"><span class="name">Gold hi</span><span class="hex">#E2C06B</span></div>
+    <div class="sw" style="background:var(--placer-gold)"><span class="name">Placer Gold</span><span class="hex">#CDA349</span></div>
+    <div class="sw" style="background:var(--gold-sh)"><span class="name">Gold sh</span><span class="hex">#A57E2C</span></div>
+    <div class="sw" style="background:var(--gold-edge)"><span class="name">Gold edge</span><span class="hex">#8F6E26</span></div>
+    <div class="sw dark" style="background:var(--accent-wash)"><span class="name">Accent wash</span><span class="hex">14% gold</span></div>
+  </div>
+</body></html>

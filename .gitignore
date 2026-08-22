@@ -1,0 +1,17 @@
+node_modules/
+data/
+prospect.db
+server.log
+*.log
+*.db-wal
+*.db-shm
+.DS_Store
+app/dist/
+test/.tailings-dialog-bundle.cjs
+extension/.stfolder/
+extension/.stignore
+deleted-claims/
+app/dist.previous/
+
+# Personal Scout profile — seed copy, never tracked
+config/scout-profile.local.json

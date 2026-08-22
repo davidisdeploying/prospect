@@ -1,0 +1,29 @@
+<!-- @dsCard group="Components" viewport="700x220" name="Feedback" subtitle="Toast (interface voice) · Tooltip (plain meaning) · Dialog" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;background:var(--bg-base);padding:24px;font-family:var(--font-sans)}
+.row{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:16px}</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { Toast, Tooltip, Badge, Button } = window.ProspectDesignSystem_c3fd64;
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <div>
+    <div className="row">
+      <Toast message="Claim staked." tone="gold" action={<Button variant="quiet" size="sm">Undo</Button>} />
+      <Toast message="Moved to tailings." tone="danger" />
+    </div>
+    <div className="row">
+      <Tooltip label="Applied"><Badge>Staked</Badge></Tooltip>
+      <Tooltip label="Active interview loops" side="right"><Badge tone="positive">Working the Vein</Badge></Tooltip>
+      <span style={{fontFamily:'var(--font-mono)',fontSize:11,color:'var(--galena)'}}>hover the chips →</span>
+    </div>
+  </div>
+);
+</script>
+</body></html>

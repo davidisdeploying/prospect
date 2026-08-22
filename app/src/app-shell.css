@@ -1,0 +1,555 @@
+.prospect-shell {
+  width: 100%;
+}
+
+.prospect-wordmark {
+  align-self: center;
+  width: 100% !important;
+  height: auto !important;
+  max-width: 232px;
+}
+
+/* Compact chrome (top bar + bottom tab bar) — hidden entirely above 960px; the desktop sidebar
+   is the only nav surface there. */
+.prospect-topbar, .prospect-tabbar {
+  display: none;
+}
+
+@media (max-width: 960px) {
+  .prospect-shell {
+    grid-template-columns: minmax(0, 1fr) !important;
+    min-height: 100dvh !important;
+  }
+
+  /* §PWA shell v2: the stacked desktop rail is removed from layout entirely on compact
+     viewports (display:none), not shrunk to fit — the compact top bar + bottom tab bar below
+     replace it as the mobile nav surface. */
+  .prospect-sidebar {
+    display: none !important;
+  }
+
+  :root {
+    --prospect-tabbar-safe: calc(60px + var(--sab, 0px));
+  }
+
+  .prospect-topbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    padding: calc(10px + var(--sat, 0px)) 16px 10px;
+    background: var(--slate-850);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .prospect-page-seal {
+    width: 40px;
+    height: 40px;
+    display: block;
+    flex-shrink: 0;
+    fill: none;
+  }
+
+  .prospect-page-seal-outer {
+    stroke: var(--text-strong);
+    stroke-width: 1.35;
+  }
+
+  .prospect-page-seal-inner {
+    stroke: var(--line-strong, var(--line));
+    stroke-width: 1;
+  }
+
+  .prospect-page-seal-base {
+    stroke: var(--text-body);
+    stroke-width: 1.65;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .prospect-page-seal-accent {
+    color: var(--placer-gold, var(--gold, #CDA349));
+    stroke: var(--placer-gold, var(--gold, #CDA349));
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .prospect-topbar-title {
+    flex: 1;
+    min-width: 0;
+    font-family: var(--font-slab);
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--text-strong);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .prospect-topbar-stake {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: var(--surface-card);
+    color: var(--text-body);
+  }
+
+  .prospect-tabbar {
+    display: flex;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    background: var(--slate-850);
+    border-top: 1px solid var(--line);
+    padding-bottom: var(--sab, 0px);
+  }
+
+  .prospect-tab {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    min-height: 44px;
+    padding: 6px 4px 8px;
+    text-decoration: none;
+    color: var(--text-faint);
+  }
+
+  .prospect-tab-label {
+    font-family: var(--font-sans);
+    font-size: 10.5px;
+    font-weight: 600;
+  }
+
+  .prospect-tab.is-active {
+    color: var(--verdigris);
+  }
+
+  .prospect-topbar-stake:focus-visible,
+  .prospect-tab:focus-visible {
+    outline: 2px solid var(--verdigris);
+    outline-offset: -2px;
+  }
+
+  .prospect-field {
+    padding-bottom: var(--prospect-tabbar-safe, 60px);
+  }
+
+  .prospect-view-header {
+    align-items: flex-start !important;
+    flex-direction: column;
+    padding: 24px 20px 18px !important;
+  }
+
+  .prospect-view-header > div,
+  .prospect-header-tools,
+  .prospect-search {
+    width: 100% !important;
+  }
+
+  .prospect-header-tools {
+    align-items: stretch !important;
+    flex-direction: column;
+    gap: 10px !important;
+  }
+
+  .prospect-header-slogan {
+    white-space: normal;
+  }
+
+  .prospect-search-results {
+    left: 0 !important;
+    right: auto !important;
+    width: min(100%, 520px) !important;
+  }
+
+  .claim-map-scroll {
+    overflow-x: visible !important;
+    padding: 18px 20px calc(30px + var(--prospect-tabbar-safe, 60px)) !important;
+  }
+
+  .claim-map-board {
+    display: block !important;
+    min-width: 0 !important;
+  }
+
+  .claim-map-funnel {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  .claim-map-divider {
+    display: none !important;
+  }
+
+  .claim-map-tailings {
+    width: auto !important;
+    margin-top: 12px;
+  }
+
+  /* ClaimDetail's scrim/panel are positioned inline (position:fixed; inset:0); the panel's
+     header and close control sit at the panel's own top edge, so pushing the scrim's content
+     box down by the status-bar inset is what keeps them clear of it on notched phones. */
+  .claim-scrim {
+    padding-top: var(--sat, 0px);
+    box-sizing: border-box;
+  }
+}
+
+:root {
+  --sat: env(safe-area-inset-top, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+}
+
+/* §PWA shell v2: top/bottom insets are owned by the compact top bar and bottom tab bar above
+   once present, not by a blanket body padding that would double up with them. Left/right have
+   no dedicated chrome, so body keeps owning those. */
+body {
+  padding-right: var(--sar);
+  padding-left: var(--sal);
+}
+
+/* Claim Detail carries dense job, evidence, audit, résumé, and history information. It is a
+   centered workspace on desktop rather than a narrow side drawer. The panel owns scrolling so
+   the close control and destructive footer remain reachable while the underlying board stays put. */
+.claim-scrim {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  box-sizing: border-box;
+}
+
+.claim-panel {
+  width: min(1120px, 100%);
+  height: min(92dvh, 1040px);
+  max-height: calc(100dvh - 64px);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+
+.claim-panel.on-light {
+  background: var(--bg-base);
+  color: var(--text-body);
+  border-color: var(--border-hair);
+}
+
+.claim-detail-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.claim-detail-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+}
+
+/* The audit reads like a short report, not a model/debug transcript. These colors are the
+   existing Prospect on-light palette: warm quartz paper, wet-slate ink, placer-gold emphasis,
+   verdigris evidence, and iron-oxide only for genuine blockers. */
+.job-audit {
+  padding: 26px;
+  border: 1px solid var(--border-hair);
+  border-radius: var(--r-lg);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-card);
+}
+
+.job-audit-head,
+.audit-section-heading--action {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.job-audit-head h3 {
+  margin: 0;
+  color: var(--text-strong);
+  font-size: 24px;
+}
+
+.job-audit-head p,
+.audit-section-heading p {
+  max-width: 760px;
+  margin: 7px 0 0;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.audit-progress,
+.audit-callout {
+  margin: 18px 0 0;
+  padding: 14px 16px;
+  border: 1px solid var(--border-hair);
+  background: var(--accent-wash-soft);
+  color: var(--text-soft);
+}
+
+.audit-report {
+  display: grid;
+  gap: 28px;
+  margin-top: 22px;
+}
+
+.audit-verdict {
+  display: grid;
+  gap: 5px;
+  padding: 20px 22px;
+  border: 1px solid var(--accent-edge);
+  border-left: 5px solid var(--accent);
+  border-radius: var(--r-md);
+  background: var(--accent-wash-soft);
+}
+
+.audit-verdict--apply_now {
+  border-color: var(--positive);
+  background: var(--positive-wash);
+}
+
+.audit-verdict--excluded {
+  border-color: var(--danger);
+  background: var(--danger-wash);
+}
+
+.audit-verdict-kicker {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.audit-verdict strong {
+  font-family: var(--font-slab);
+  font-size: 25px;
+  color: var(--text-strong);
+}
+
+.audit-verdict p {
+  margin: 0;
+  color: var(--text-soft);
+}
+
+.audit-section {
+  display: grid;
+  gap: 14px;
+}
+
+.audit-section-heading h4,
+.audit-requirement-group h5,
+.audit-learning-grid h5 {
+  margin: 0;
+  color: var(--text-strong);
+}
+
+.audit-section-heading h4 {
+  font-size: 20px;
+}
+
+.audit-requirement-groups,
+.audit-learning-grid,
+.audit-market-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.audit-requirement-group,
+.audit-learning-grid article,
+.audit-market-grid article {
+  padding: 17px;
+  border: 1px solid var(--border-hair);
+  border-radius: var(--r-md);
+  background: var(--surface-card);
+}
+
+.audit-requirement-group--hard_gap {
+  border-top: 4px solid var(--danger);
+}
+
+.audit-requirement-group--competitive_gap,
+.audit-requirement-group--partial_evidence {
+  border-top: 4px solid var(--accent-edge);
+}
+
+.audit-requirement-group--supported {
+  border-top: 4px solid var(--positive);
+}
+
+.audit-group-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.audit-group-title h5,
+.audit-learning-grid h5 {
+  font-size: 16px;
+}
+
+.audit-group-title span {
+  min-width: 28px;
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+  background: var(--bg-sunken);
+  color: var(--text-soft);
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.audit-group-intro,
+.audit-learning-grid p,
+.audit-market-grid p {
+  margin: 5px 0 0;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.audit-requirement-group ul {
+  display: grid;
+  gap: 12px;
+  margin: 15px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.audit-requirement-group li {
+  display: grid;
+  gap: 3px;
+  padding-top: 11px;
+  border-top: 1px solid var(--border-hair);
+}
+
+.audit-requirement-group li:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.audit-requirement-group li > strong {
+  color: var(--text-strong);
+  font-size: 14px;
+}
+
+.audit-requirement-group li > span,
+.audit-requirement-group li > em {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-style: normal;
+}
+
+.audit-requirement-group li > em {
+  color: var(--danger);
+}
+
+.audit-next-steps {
+  padding: 20px;
+  border-left: 4px solid var(--positive);
+  background: var(--positive-wash);
+}
+
+.audit-next-steps ol {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding-left: 23px;
+  color: var(--text-soft);
+}
+
+.audit-learning-grid article,
+.audit-market-grid article {
+  display: grid;
+  align-content: start;
+  gap: 5px;
+}
+
+.audit-learning-grid article > span {
+  margin-top: 4px;
+  color: var(--positive);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.audit-market-grid strong {
+  color: var(--text-strong);
+}
+
+.audit-technical {
+  padding: 14px 16px;
+  border: 1px dashed var(--border-dashed);
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.audit-technical summary {
+  cursor: pointer;
+  color: var(--text-soft);
+  font-weight: 600;
+}
+
+.audit-technical li {
+  margin: 5px 0;
+}
+
+@media (max-width: 960px) {
+  .claim-scrim {
+    padding: calc(16px + var(--sat, 0px)) 16px calc(16px + var(--sab, 0px));
+  }
+
+  .claim-panel {
+    width: 100%;
+    height: 100%;
+    max-height: calc(100dvh - 32px - var(--sat, 0px) - var(--sab, 0px));
+  }
+
+  .audit-requirement-groups,
+  .audit-learning-grid,
+  .audit-market-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .claim-scrim {
+    padding: var(--sat, 0px) 0 var(--sab, 0px);
+  }
+
+  .claim-panel {
+    max-height: calc(100dvh - var(--sat, 0px) - var(--sab, 0px));
+    border-right: 0;
+    border-left: 0;
+    border-radius: 0;
+  }
+
+  .job-audit {
+    padding: 18px;
+    border-right: 0;
+    border-left: 0;
+    border-radius: 0;
+  }
+
+  .job-audit-head,
+  .audit-section-heading--action {
+    flex-direction: column;
+  }
+}

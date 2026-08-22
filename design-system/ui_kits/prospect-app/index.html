@@ -1,0 +1,103 @@
+<!-- @dsCard group="Prospect App" viewport="1280x780" name="Prospect — the app" subtitle="Claim Map board · Hunt Report · claim drawer · stake dialog" -->
+<!doctype html>
+<html lang="en" class="prospect">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prospect — Claim Map</title>
+<link rel="icon" type="image/svg+xml" href="../../assets/prospect-mark-compact.svg">
+<link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<script src="data.js"></script>
+<style>html,body{margin:0;background:var(--bg-base)}</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="AppShell.jsx"></script>
+<script type="text/babel" src="ClaimMap.jsx"></script>
+<script type="text/babel" src="HuntReport.jsx"></script>
+<script type="text/babel" src="ClaimDetail.jsx"></script>
+<script type="text/babel" src="TailingsPond.jsx"></script>
+<script type="text/babel" src="StakeDialog.jsx"></script>
+
+<script type="text/babel" data-presets="env,react">
+const { Button, Toast } = window.ProspectDesignSystem_c3fd64;
+const { AppShell, ViewHeader, ClaimMap, HuntReport, ClaimDetail, TailingsPond, StakeDialog } = window;
+const DATA = window.PROSPECT_DATA;
+
+function App() {
+  const [view, setView] = React.useState('map');
+  const [claims, setClaims] = React.useState(DATA.claims);
+  const [open, setOpen] = React.useState(null);     // open claim in drawer
+  const [staking, setStaking] = React.useState(false);
+  const [toast, setToast] = React.useState(null);   // {message, tone}
+  const [tailings, setTailings] = React.useState([]); // moved-to-tailings claims
+
+  function flash(message, tone) {
+    setToast({ message, tone });
+    clearTimeout(window.__t); window.__t = setTimeout(() => setToast(null), 2600);
+  }
+  function stake(role, company) {
+    const id = 'CLM-00' + (50 + claims.length);
+    setClaims((cs) => [...cs, { id, role, company, stage: 'Staked', meta: 'staked just now' }]);
+    setStaking(false);
+    flash('Claim staked.', 'gold');
+  }
+  function toTailings(claim) {
+    setClaims((cs) => cs.filter((c) => c.id !== claim.id));
+    setTailings((t) => [{ ...claim, reason: 'Withdrawn' }, ...t]);
+    setOpen(null);
+    flash('Moved to tailings.', 'danger');
+  }
+
+  const counts = { active: claims.length, veins: claims.filter(c => ['Working the Vein'].includes(c.stage)).length };
+
+  return (
+    <AppShell view={view} setView={setView} onStake={() => setStaking(true)}>
+      {view === 'map' && (
+        <React.Fragment>
+          <ViewHeader eyebrow="The dig" title="The Claim Map"
+            sub={`${counts.active} claims · ${counts.veins} active veins`}
+            right={<div className="ProspectStat" style={{ fontFamily:'var(--font-mono)', fontSize:12, color:'var(--text-muted)' }}>survey wide · stake narrow · work the vein</div>} />
+          <ClaimMap claims={claims} stages={DATA.stages} onOpen={setOpen} />
+        </React.Fragment>
+      )}
+      {view === 'report' && (
+        <React.Fragment>
+          <ViewHeader eyebrow="The hunt · cross-section" title="Hunt Report"
+            sub="Your whole search, read like a core sample." />
+          <HuntReport metrics={DATA.metrics} stages={DATA.stages} claims={claims} />
+        </React.Fragment>
+      )}
+      {view === 'tailings' && (
+        <React.Fragment>
+          <ViewHeader eyebrow="Tailings pond" title="Tailings Pond"
+            sub="The waste rock left after extraction — a normal byproduct of mining." />
+          <TailingsPond items={tailings} onStake={() => setStaking(true)} />
+        </React.Fragment>
+      )}
+
+      <ClaimDetail claim={open} onClose={() => setOpen(null)} onTailings={toTailings} />
+      <StakeDialog open={staking} onClose={() => setStaking(false)} onStake={stake} />
+
+      {toast && (
+        <div style={{ position: 'fixed', left: '50%', bottom: 28, transform: 'translateX(-50%)', zIndex: 80, animation: 'pp-rise .22s var(--ease-sluice)' }}>
+          <Toast message={toast.message} tone={toast.tone} />
+        </div>
+      )}
+    </AppShell>
+  );
+}
+
+const style = document.createElement('style');
+style.textContent = '@keyframes pp-rise{from{opacity:0;transform:translate(-50%,8px)}to{opacity:1;transform:translate(-50%,0)}}';
+document.head.appendChild(style);
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

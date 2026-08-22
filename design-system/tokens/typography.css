@@ -1,0 +1,48 @@
+/* ============================================================
+   Prospect — Typography tokens
+   Slab display (personality) · humanist sans (legibility) ·
+   mono (metric readings). Slab with restraint; sans does the
+   heavy lifting; mono for ALL metrics.
+   ============================================================ */
+
+:root {
+  /* --- Families ---------------------------------------------- */
+  --font-slab: 'Zilla Slab', 'Roslindale', 'Domaine Display', Georgia, serif;
+  --font-sans: 'Inter', 'Söhne', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Spline Sans Mono', ui-monospace, SFMono-Regular, monospace;
+
+  /* --- Weights --------------------------------- @kind font --- */
+  --fw-regular: 400;  /* @kind font */
+  --fw-medium:  500;  /* @kind font */
+  --fw-semi:    600;  /* @kind font */
+  --fw-bold:    700;  /* @kind font */
+
+  /* --- Type scale (px) --------------------------------------- */
+  --fs-display:  68px;  /* hero headline */
+  --fs-h1:       38px;
+  --fs-h2:       30px;
+  --fs-h3:       21px;
+  --fs-lede:     19px;
+  --fs-body:     16px;
+  --fs-sm:       14px;
+  --fs-xs:       12px;
+  --fs-metric:   30px;  /* big metric reading */
+  --fs-eyebrow:  12px;
+
+  /* --- Line heights ------------------------------------------ */
+  --lh-tight:   1.05;   /* @kind other */
+  --lh-snug:    1.25;   /* @kind other */
+  --lh-body:    1.55;   /* @kind other */
+
+  /* --- Tracking ---------------------------------------------- */
+  --ls-display: -0.01em;
+  --ls-body:     0em;
+  --ls-eyebrow:  0.22em;  /* mono eyebrow caps */
+  --ls-label:    0.12em;  /* mono column heads */
+
+  /* --- Semantic role aliases --------------------------------- */
+  --type-display-family: var(--font-slab);
+  --type-heading-family: var(--font-slab);
+  --type-body-family:    var(--font-sans);
+  --type-metric-family:  var(--font-mono);
+}

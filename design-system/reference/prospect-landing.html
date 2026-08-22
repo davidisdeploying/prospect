@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en" class="prospect">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prospect — survey wide, stake narrow, work the vein</title>
+<link rel="icon" type="image/svg+xml" href="prospect-mark-compact.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --slate:#1B2327; --panel:#212B2F; --panel-2:#10171A;
+  --gold:#CDA349; --gold-hi:#E2C06B; --gold-sh:#A57E2C;
+  --verdigris:#4C8C78; --iron:#A14B33;
+  --quartz:#E7E1D3; --galena:#6E767B; --galena-dim:#3A4448;
+  --line:#2E383C;
+  --slab:'Zilla Slab',Georgia,serif;
+  --sans:'Inter',system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --r:14px;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:var(--slate); color:var(--quartz);
+  font-family:var(--sans); font-size:16px; line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  background-image:
+    repeating-linear-gradient(90deg, transparent 0 119px, rgba(110,118,123,.05) 119px 120px);
+}
+.wrap{max-width:1160px; margin:0 auto; padding:0 28px}
+h1,h2,h3{font-family:var(--slab); font-weight:700; letter-spacing:-.01em; line-height:1.05; margin:0}
+a{color:inherit}
+.mono{font-family:var(--mono)}
+.eyebrow{font-family:var(--mono); font-size:12px; letter-spacing:.22em; text-transform:uppercase; color:var(--galena)}
+
+/* nav */
+header{position:sticky; top:0; z-index:20; backdrop-filter:blur(8px);
+  background:rgba(27,35,39,.82); border-bottom:1px solid var(--line)}
+nav{display:flex; align-items:center; gap:30px; height:72px}
+.lockup{display:flex; align-items:center; gap:12px; font-family:var(--slab); font-weight:700; font-size:24px; letter-spacing:-.01em}
+.lockup svg{display:block}
+.navlinks{display:flex; gap:26px; margin-left:8px; font-size:14.5px; color:var(--galena)}
+.navlinks a{text-decoration:none}
+.navlinks a:hover{color:var(--quartz)}
+.spacer{flex:1}
+.btn{font-family:var(--sans); font-weight:600; font-size:14.5px; border-radius:10px;
+  padding:11px 18px; border:1px solid transparent; cursor:pointer; text-decoration:none; display:inline-block}
+.btn-gold{background:var(--gold); color:#1c1a12; border-color:var(--gold-sh)}
+.btn-gold:hover{background:var(--gold-hi)}
+.btn-ghost{border-color:var(--galena-dim); color:var(--quartz)}
+.btn-ghost:hover{border-color:var(--galena)}
+:focus-visible{outline:2px solid var(--gold); outline-offset:2px}
+
+/* hero */
+.hero{display:grid; grid-template-columns:1.05fr 1.25fr; gap:48px; align-items:center;
+  padding:84px 0 64px}
+.hero h1{font-size:clamp(40px,5.4vw,68px)}
+.hero h1 .seam{color:var(--gold); position:relative}
+.hero p.lede{font-size:19px; color:#cfd4d0; margin:22px 0 30px; max-width:42ch}
+.cta-row{display:flex; gap:14px; align-items:center; flex-wrap:wrap}
+.cta-note{font-family:var(--mono); font-size:12.5px; color:var(--galena)}
+
+/* claim map (light-table analog) */
+.board{background:var(--panel-2); border:1px solid var(--line); border-radius:var(--r);
+  padding:16px; box-shadow:0 24px 60px -30px #000}
+.board-bar{display:flex; align-items:center; justify-content:space-between; padding:4px 6px 14px}
+.board-bar .t{font-family:var(--slab); font-weight:600; font-size:15px}
+.cols{display:grid; grid-template-columns:repeat(5,1fr); gap:10px}
+.col-h{font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--galena); display:flex; justify-content:space-between; margin-bottom:8px; white-space:nowrap}
+.col-h .n{color:var(--quartz)}
+.col.strike .col-h{color:var(--gold)}
+.col.strike .col-h .n{color:var(--gold)}
+.card{background:var(--panel); border:1px solid var(--line); border-radius:9px; padding:9px 10px; margin-bottom:8px}
+.card .role{font-size:12px; font-weight:600; line-height:1.25}
+.card .co{font-size:11px; color:var(--galena); margin-top:2px}
+.card .meta{font-family:var(--mono); font-size:10px; color:var(--galena); margin-top:6px}
+.card.gold{border-color:var(--gold-sh); background:linear-gradient(180deg,rgba(205,163,73,.14),rgba(205,163,73,.04))}
+.card.gold .meta{color:var(--gold)}
+.ghost{height:34px; border:1px dashed var(--galena-dim); border-radius:9px; opacity:.5}
+
+/* section scaffold */
+section.band{padding:78px 0; border-top:1px solid var(--line)}
+.sec-head{max-width:60ch; margin-bottom:40px}
+.sec-head h2{font-size:clamp(26px,3.2vw,38px); margin-top:10px}
+.sec-head p{color:#c4cac6; font-size:17px; margin:14px 0 0}
+
+/* strata funnel (signature) */
+.strata-grid{display:grid; grid-template-columns:1.4fr 1fr; gap:48px; align-items:center}
+.strata svg{width:100%; height:auto; display:block}
+.legend{display:flex; flex-direction:column; gap:2px}
+.legend .row{display:grid; grid-template-columns:1fr auto; align-items:baseline; gap:14px;
+  padding:13px 0; border-bottom:1px solid var(--line)}
+.legend .row:last-child{border-bottom:0}
+.legend .name{font-family:var(--slab); font-weight:600; font-size:16px}
+.legend .gloss{font-size:12.5px; color:var(--galena)}
+.legend .ct{font-family:var(--mono); font-size:22px; font-weight:500}
+.legend .strike .name{color:var(--gold)} .legend .strike .ct{color:var(--gold)}
+
+/* claim ticket + hunt report */
+.two{display:grid; grid-template-columns:1fr 1fr; gap:28px; align-items:start}
+.ticket{background:var(--panel-2); border:1px solid var(--line); border-radius:var(--r); overflow:hidden}
+.ticket .tophd{display:flex; justify-content:space-between; align-items:center;
+  padding:14px 18px; border-bottom:1px dashed var(--galena-dim); background:var(--panel)}
+.ticket .clm{font-family:var(--mono); font-size:12px; color:var(--galena)}
+.chip{font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase;
+  padding:4px 9px; border-radius:999px; border:1px solid var(--verdigris); color:var(--verdigris)}
+.ticket .body{padding:18px}
+.ticket h3{font-size:21px}
+.ticket .co{color:var(--galena); margin:3px 0 16px}
+.kv{display:grid; grid-template-columns:auto 1fr; gap:7px 16px; font-size:13.5px}
+.kv .k{font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--galena); padding-top:2px}
+.kv .v{color:var(--quartz)} .kv .v.num{font-family:var(--mono)}
+.samples{margin-top:16px; padding-top:14px; border-top:1px solid var(--line)}
+.samples .lbl{font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--galena); margin-bottom:6px}
+.samples p{margin:0; font-size:14px; color:#cfd4d0}
+
+.huntrep{background:var(--panel-2); border:1px solid var(--line); border-radius:var(--r); overflow:hidden}
+.huntrep .tophd{display:flex; justify-content:space-between; align-items:center; padding:14px 18px; border-bottom:1px solid var(--line)}
+.huntrep .stamp{font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--gold); border:1px solid var(--gold-sh); padding:4px 9px; border-radius:6px}
+.metrics{display:grid; grid-template-columns:1fr 1fr 1fr; gap:1px; background:var(--line)}
+.metric{background:var(--panel-2); padding:18px 18px 16px}
+.metric .k{font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--galena)}
+.metric .v{font-family:var(--mono); font-size:30px; font-weight:500; margin-top:6px; line-height:1}
+.metric.hi .v{color:var(--gold)}
+.metric .sub{font-size:11.5px; color:var(--galena); margin-top:5px}
+
+footer{border-top:1px solid var(--line); padding:46px 0 60px; color:var(--galena)}
+.foot{display:flex; justify-content:space-between; align-items:center; gap:24px; flex-wrap:wrap}
+.through{font-family:var(--slab); font-weight:600; font-size:19px; color:var(--quartz)}
+.through b{color:var(--gold); font-weight:600}
+.footlinks{display:flex; gap:22px; font-size:13.5px}
+.footlinks a{text-decoration:none} .footlinks a:hover{color:var(--quartz)}
+
+@media (max-width:880px){
+  .hero{grid-template-columns:1fr; gap:34px; padding:54px 0 40px}
+  .strata-grid,.two{grid-template-columns:1fr; gap:30px}
+  .navlinks{display:none}
+  .cols{grid-template-columns:repeat(5,minmax(0,1fr)); gap:7px}
+  .card .role{font-size:11px}
+}
+@media (max-width:560px){
+  nav{gap:10px; height:62px}
+  .lockup{font-size:18px} .lockup svg{width:30px;height:30px}
+  .btn{padding:8px 12px; font-size:13px}
+  .nav-signin{display:none}
+  .nav-cta{white-space:nowrap}
+  .board{overflow-x:auto; -webkit-overflow-scrolling:touch}
+  .cols{min-width:560px}
+  .hero h1{font-size:38px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <nav>
+      <span class="lockup">
+        <svg width="42" height="42" viewBox="0 0 120 120" aria-hidden="true">
+          <path d="M14,52 Q60,118 106,52" fill="#10171A"/>
+          <ellipse cx="60" cy="52" rx="46" ry="18" fill="#10171A"/>
+          <path d="M32,49 Q60,40 88,49" fill="none" stroke="#6E767B" stroke-width="1.8" opacity="0.5"/>
+          <path d="M37,45.5 Q60,38 83,45.5" fill="none" stroke="#6E767B" stroke-width="1.8" opacity="0.4"/>
+          <ellipse cx="60" cy="52" rx="46" ry="18" fill="none" stroke="#E7E1D3" stroke-width="6" stroke-linecap="round"/>
+          <path d="M14,52 Q60,118 106,52" fill="none" stroke="#E7E1D3" stroke-width="6" stroke-linecap="round"/>
+          <ellipse cx="60" cy="81" rx="16" ry="3" fill="#000" opacity="0.42"/>
+          <circle cx="43" cy="74" r="1.7" fill="#CDA349"/><circle cx="79" cy="75" r="1.6" fill="#CDA349"/>
+          <polygon points="45,77 50,63 60,57.5 70,60 77,70 71,81 56,83" fill="#CDA349" stroke="#8F6E26" stroke-width="1.7" stroke-linejoin="round"/>
+          <polygon points="50,63 60,57.5 64,68 53,70.5" fill="#E2C06B"/>
+          <polygon points="70,60 77,70 71,81 63,69" fill="#A57E2C"/>
+          <circle cx="55" cy="64" r="2" fill="#F6E8B0"/>
+        </svg>
+        Prospect
+      </span>
+      <span class="navlinks">
+        <a href="#">The Dig</a>
+                <a href="#">Pricing</a>
+      </span>
+      <span class="spacer"></span>
+      <a class="btn btn-ghost nav-signin" href="#">Sign in</a>
+      <a class="btn btn-gold nav-cta" href="#">Stake a claim</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div>
+      <span class="eyebrow">Job-application tracker</span>
+      <h1 style="margin-top:14px">Survey wide.<br>Stake narrow.<br><span class="seam">Work the vein.</span></h1>
+      <p class="lede">Most job hunts drown in tabs and spreadsheets. Prospect treats the search like prospecting: sift a wide field of listings, stake the few worth your time, and dig the ones that show real value.</p>
+      <div class="cta-row">
+        <a class="btn btn-gold" href="#">Stake your first claim</a>
+        <a class="btn btn-ghost" href="#">See the dig &rarr;</a>
+        <span class="cta-note">free · self-hosted · no recruiter spam</span>
+      </div>
+    </div>
+
+    <!-- Claim Map: the working surface, shown live -->
+    <div class="board" aria-label="Claim map preview">
+      <div class="board-bar">
+        <span class="t">The Claim Map</span>
+        <span class="mono" style="font-size:11px;color:var(--galena)">74 claims · 6 active veins</span>
+      </div>
+      <div class="cols">
+        <div class="col">
+          <div class="col-h"><span>Showings</span><span class="n">42</span></div>
+          <div class="card"><div class="role">Senior Backend Eng</div><div class="co">Northvale Robotics</div><div class="meta">$180–210k · remote</div></div>
+          <div class="card"><div class="role">Platform Engineer</div><div class="co">Atlas Data</div><div class="meta">$165–195k · hybrid</div></div>
+          <div class="ghost"></div>
+        </div>
+        <div class="col">
+          <div class="col-h"><span>Staked</span><span class="n">18</span></div>
+          <div class="card"><div class="role">Infra Engineer</div><div class="co">Cobalt Systems</div><div class="meta">staked 3d ago</div></div>
+          <div class="card"><div class="role">SRE</div><div class="co">Meridian Health</div><div class="meta">staked 1w ago</div></div>
+        </div>
+        <div class="col">
+                    <div class="card"><div class="role">Full-Stack Eng</div><div class="co">Tidewater Labs</div><div class="meta">screen · Thu 2pm</div></div>
+        </div>
+        <div class="col">
+          <div class="col-h"><span>Vein</span><span class="n">4</span></div>
+          <div class="card"><div class="role">Staff Engineer</div><div class="co">Granite Map Co.</div><div class="meta">onsite · Jun 26</div></div>
+        </div>
+        <div class="col strike">
+          <div class="col-h"><span>Strike</span><span class="n">1</span></div>
+          <div class="card gold"><div class="role">Senior Engineer</div><div class="co">Lumen Foundry</div><div class="meta">offer · $205k</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STRATA FUNNEL (signature) -->
+  <section class="band">
+    <div class="sec-head">
+      <span class="eyebrow">The Hunt · cross-section</span>
+      <h2>Your whole search, read like a core sample.</h2>
+      <p>Every funnel chart is a bar that got bored. Prospect draws your pipeline as the strata you actually dig through — wide rock up top, the gold seam at the bottom. One look tells you where the search is choking.</p>
+    </div>
+    <div class="strata-grid">
+      <div class="strata">
+        <svg viewBox="0 0 720 430" role="img" aria-label="Pipeline drawn as geological strata, narrowing to a gold seam">
+          <defs>
+            <linearGradient id="goldseam" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#E2C06B"/><stop offset="1" stop-color="#C8992F"/>
+            </linearGradient>
+            <pattern id="grain" width="14" height="14" patternUnits="userSpaceOnUse">
+              <circle cx="3" cy="4" r="1" fill="#ffffff" opacity="0.04"/>
+              <circle cx="10" cy="10" r="1" fill="#ffffff" opacity="0.035"/>
+            </pattern>
+          </defs>
+          <!-- depth axis -->
+          <g font-family="'JetBrains Mono',monospace" font-size="11" fill="#6E767B" text-anchor="end">
+            <text x="78" y="44">0 m</text>
+            <text x="78" y="120">-12 m</text>
+            <text x="78" y="196">-24 m</text>
+            <text x="78" y="272">-36 m</text>
+            <text x="78" y="348">-48 m</text>
+            <text x="78" y="416" fill="#CDA349">seam</text>
+          </g>
+          <g stroke="#1B2327" stroke-width="2">
+            <!-- trapezoids: continuous funnel, center x=400 -->
+            <polygon points="110,40 690,40 645,116 155,116" fill="#36423F"/>
+            <polygon points="155,116 645,116 600,192 200,192" fill="#2D3836"/>
+            <polygon points="200,192 600,192 545,268 255,268" fill="#26302E"/>
+            <polygon points="255,268 545,268 490,344 310,344" fill="#1F2827"/>
+            <polygon points="310,344 490,344 452,418 348,418" fill="url(#goldseam)" stroke="#8F6E26"/>
+            <!-- grain texture overlay -->
+            <polygon points="110,40 690,40 645,116 155,116" fill="url(#grain)"/>
+            <polygon points="155,116 645,116 600,192 200,192" fill="url(#grain)"/>
+            <polygon points="200,192 600,192 545,268 255,268" fill="url(#grain)"/>
+            <polygon points="255,268 545,268 490,344 310,344" fill="url(#grain)"/>
+          </g>
+          <!-- in-layer labels -->
+          <g font-family="'Zilla Slab',serif" font-weight="600" fill="#E7E1D3" text-anchor="middle">
+            <text x="400" y="83" font-size="16">Showings</text>
+            <text x="400" y="159" font-size="16">Staked</text>
+                        <text x="400" y="311" font-size="15">Working the Vein</text>
+            <text x="400" y="387" font-size="16" fill="#241d08">Strike</text>
+          </g>
+          <g font-family="'JetBrains Mono',monospace" font-size="12" fill="#9aa1a4" text-anchor="middle">
+            <text x="400" y="100">42</text><text x="400" y="176">18</text>
+            <text x="400" y="252">9</text><text x="400" y="328">4</text>
+            <text x="400" y="404" fill="#241d08" font-weight="700">1</text>
+          </g>
+        </svg>
+      </div>
+      <div class="legend">
+        <div class="row"><div><div class="name">Showings</div><div class="gloss">Listings you've flagged to investigate</div></div><div class="ct">42</div></div>
+        <div class="row"><div><div class="name">Staked</div><div class="gloss">Applications submitted</div></div><div class="ct">18</div></div>
+                <div class="row"><div><div class="name">Working the Vein</div><div class="gloss">Active interview loops</div></div><div class="ct">4</div></div>
+        <div class="row strike"><div><div class="name">Strike</div><div class="gloss">Offers on the table</div></div><div class="ct">1</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLAIM TICKET + HUNT REPORT -->
+  <section class="band">
+    <div class="sec-head">
+      <span class="eyebrow">One claim, up close</span>
+      <h2>Every job is a staked claim — with a logbook.</h2>
+      <p>Open a claim to see everything you've dug up: comp, contacts, and your own core samples. Notes that used to scatter across email and memory, filed in one place.</p>
+    </div>
+    <div class="two">
+      <!-- claim ticket -->
+      <div class="ticket">
+        <div class="tophd">
+          <span class="clm">CLM-0047 · staked 2026-06-09</span>
+          <span class="chip">Working the Vein</span>
+        </div>
+        <div class="body">
+          <h3>Senior Backend Engineer</h3>
+          <div class="co">Granite Map Co. — Remote (US)</div>
+          <div class="kv">
+            <span class="k">Comp</span><span class="v num">$185k – $215k + 0.05%</span>
+            <span class="k">Source</span><span class="v">Referral · Dana R.</span>
+            <span class="k">Next</span><span class="v">Onsite loop — Jun 26, 11:00</span>
+            <span class="k">Contacts</span><span class="v">Dana R. (recruiter) · Sam K. (hiring mgr)</span>
+          </div>
+          <div class="samples">
+            <div class="lbl">Core samples</div>
+            <p>Hiring manager is ex-Stripe infra. Take-home was a queue design — went well. Team owns the routing layer; growing fast. Ask about on-call rotation.</p>
+          </div>
+        </div>
+      </div>
+      <!-- hunt report -->
+      <div class="report">
+        <div class="tophd">
+          <span class="t" style="font-family:var(--slab);font-weight:600;font-size:15px">Hunt Report</span>
+          <span class="stamp">30-day yield</span>
+        </div>
+        <div class="metrics">
+          <div class="metric"><div class="k">Claims staked</div><div class="v">18</div><div class="sub">+5 this week</div></div>
+          <div class="metric"><div class="k">Response rate</div><div class="v">50%</div><div class="sub">replied within 14d</div></div>
+          <div class="metric hi"><div class="k">Strikes</div><div class="v">1</div><div class="sub">offer in hand</div></div>
+          <div class="metric"><div class="k">Active veins</div><div class="v">4</div><div class="sub">live loops</div></div>
+          <div class="metric"><div class="k">Median response</div><div class="v">6d</div><div class="sub">staked → reply</div></div>
+          <div class="metric"><div class="k">Tailings</div><div class="v">13</div><div class="sub">closed / passed</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span class="through">Survey wide, stake narrow, <b>work the vein.</b></span>
+    <span class="footlinks">
+      <a href="#">GitHub</a><a href="#">Docs</a><a href="#">Self-host</a><a href="#">Privacy</a>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>

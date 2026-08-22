@@ -1,0 +1,23 @@
+{
+  "name": "prospect",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "app",
+    "server"
+  ],
+  "scripts": {
+    "dev:api": "npm run dev --workspace=server",
+    "dev:web": "npm run dev --workspace=app",
+    "build": "npm run build --workspace=app",
+    "deploy:web": "node scripts/web-release.mjs deploy",
+    "rollback:web": "node scripts/web-release.mjs rollback",
+    "test": "node --test test/*.test.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0"
+  },
+  "dependencies": {
+    "web-push": "^3.6.7"
+  }
+}

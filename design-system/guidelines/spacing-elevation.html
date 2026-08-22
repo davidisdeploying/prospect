@@ -1,0 +1,19 @@
+<!-- @dsCard group="Spacing" viewport="700x180" name="Elevation — wells vs lift" subtitle="Panels sink into slate; cards lift. Gold glow spent once." -->
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../styles.css">
+<style>
+  body{margin:0;background:var(--bg-base);padding:28px;font-family:var(--font-sans)}
+  .row{display:flex;gap:22px;align-items:center}
+  .b{width:180px;height:90px;border-radius:var(--r-lg);display:flex;align-items:center;justify-content:center;
+     font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+  .well{background:var(--bg-sunken);border:1px solid var(--line);box-shadow:var(--shadow-panel);color:var(--galena)}
+  .card{background:var(--surface-card);border:1px solid var(--line);box-shadow:var(--shadow-card);color:var(--text-soft)}
+  .strike{background:linear-gradient(180deg,var(--accent-wash),var(--accent-wash-soft));border:1px solid var(--gold-sh);box-shadow:var(--shadow-strike);color:var(--accent)}
+</style></head>
+<body>
+  <div class="row">
+    <div class="b well">Well · sunken</div>
+    <div class="b card">Card · lifted</div>
+    <div class="b strike">Strike · gold glow</div>
+  </div>
+</body></html>

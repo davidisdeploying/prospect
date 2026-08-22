@@ -1,0 +1,50 @@
+{
+  "label": "Example profile — IT support and infrastructure",
+  "profile": {
+    "target_titles": [
+      "desktop support technician",
+      "it support specialist",
+      "infrastructure technician",
+      "noc technician",
+      "data center technician",
+      "junior systems administrator",
+      "cloud support associate",
+      "cloud operations technician",
+      "windows imaging deployment technician"
+    ],
+    "preferred_locations": [
+      "dallas",
+      "remote"
+    ],
+    "credentials": [
+      "associate degree, information technology"
+    ],
+    "skills": [
+      "windows imaging",
+      "sccm",
+      "mdt",
+      "intune",
+      "autopilot",
+      "endpoint",
+      "active directory",
+      "break/fix",
+      "cloud"
+    ],
+    "experience_terms": [
+      "configuration technician",
+      "deployment",
+      "troubleshooting",
+      "end user",
+      "hardware"
+    ],
+    "avoid_titles": [
+      "senior",
+      "sr.",
+      "manager",
+      "director",
+      "architect",
+      "principal",
+      "lead"
+    ]
+  }
+}

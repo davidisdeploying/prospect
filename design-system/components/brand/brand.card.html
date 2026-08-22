@@ -1,0 +1,23 @@
+<!-- @dsCard group="Components" viewport="700x170" name="Brand · Logo & Wordmark" subtitle="Gold-pan mark (primary + compact) · lockup" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;background:var(--bg-base);padding:24px;font-family:var(--font-sans)}
+.row{display:flex;gap:40px;align-items:center}</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { Logo, Wordmark } = window.ProspectDesignSystem_c3fd64;
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <div className="row">
+    <Logo size={64} />
+    <Logo size={40} variant="compact" />
+    <Wordmark size={30} />
+  </div>
+);
+</script>
+</body></html>

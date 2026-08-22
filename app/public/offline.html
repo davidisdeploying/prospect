@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1B2327">
+  <title>Offline — Prospect</title>
+  <style>
+    :root {
+      --bg: #1B2327;
+      --card: #212B2F;
+      --line: #2E383C;
+      --text: #E7E1D3;
+      --strong: #F3EFE6;
+      --muted: #9AA1A4;
+      --verdigris: #4C8C78;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+      text-align: center;
+    }
+    .offline-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 36px 28px;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+    }
+    .mark {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 20px;
+      color: var(--verdigris);
+    }
+    h1 {
+      font-family: "Zilla Slab", Georgia, serif;
+      font-size: 24px;
+      color: var(--strong);
+      margin: 0 0 12px;
+    }
+    p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+      margin: 0 0 24px;
+    }
+    .btn {
+      display: inline-block;
+      background: var(--verdigris);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 999px;
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn:active {
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+  <div class="offline-card">
+    <svg class="mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="1" y1="1" x2="23" y2="23"></line>
+      <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path>
+      <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path>
+      <path d="M10.71 5.05A16 16 0 0 1 22.58 9"></path>
+      <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path>
+      <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+      <line x1="12" y1="20" x2="12.01" y2="20"></line>
+    </svg>
+    <h1>You are offline</h1>
+    <p>Prospect requires a network connection to load fresh job claims, scout discoveries, and reports.</p>
+    <button class="btn" onclick="window.location.reload()">Retry Connection</button>
+  </div>
+</body>
+</html>

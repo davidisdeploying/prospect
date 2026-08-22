@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Prospect Landing" description="Marketing hero + live claim-map preview, in the Prospect house style" -->
+<helmet>
+<script src="./ds-base.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap');
+  body{margin:0}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:#1B2327;color:#E7E1D3;font-family:'Inter',system-ui,sans-serif;background-image:repeating-linear-gradient(90deg, transparent 0 119px, rgba(110,118,123,.05) 119px 120px);">
+
+  <header style="display:flex;align-items:center;gap:14px;height:72px;max-width:1100px;margin:0 auto;padding:0 28px;border-bottom:1px solid #2E383C;">
+    <x-import component-from-global-scope="ProspectDesignSystem_c3fd64.Wordmark" size="22" hint-size="160px,40px"></x-import>
+    <span style="flex:1"></span>
+    <x-import component-from-global-scope="ProspectDesignSystem_c3fd64.Button" variant="gold" size="sm" hint-size="140px,38px">Stake a claim</x-import>
+  </header>
+
+  <main style="max-width:1100px;margin:0 auto;padding:84px 28px 64px;display:grid;grid-template-columns:1.05fr 1.2fr;gap:48px;align-items:center;">
+    <div>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:#6E767B;">Job-application tracker</span>
+      <h1 style="font-family:'Zilla Slab',serif;font-weight:700;font-size:60px;line-height:1.03;letter-spacing:-.01em;color:#F3EFE6;margin:14px 0 0;">Survey wide.<br>Stake narrow.<br><span style="color:#CDA349">Work the vein.</span></h1>
+      <p style="font-size:19px;color:#CFD4D0;max-width:42ch;margin:22px 0 30px;">Most job hunts drown in tabs and spreadsheets. Prospect treats the search like prospecting: sift a wide field, stake the few worth your time, dig the ones that show real value.</p>
+      <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;">
+        <x-import component-from-global-scope="ProspectDesignSystem_c3fd64.Button" variant="gold" hint-size="190px,44px">Stake your first claim</x-import>
+        <x-import component-from-global-scope="ProspectDesignSystem_c3fd64.Button" variant="ghost" hint-size="130px,44px">See the dig →</x-import>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#6E767B;">free · self-hosted</span>
+      </div>
+    </div>
+
+    <div style="background:#10171A;border:1px solid #2E383C;border-radius:14px;padding:16px;box-shadow:0 24px 60px -30px #000;">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:4px 6px 14px;">
+        <span style="font-family:'Zilla Slab',serif;font-weight:600;font-size:15px;color:#E7E1D3;">The Claim Map</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#6E767B;">74 claims · 6 active veins</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;">
+        <div>
+          <x-import component-from-global-scope="ProspectDesignSystem_c3fd64.StageColumnHead" name="Showings" count="42" hint-size="100%,28px"></x-import>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+            <x-import component-from-global-scope="ProspectDesignSystem_c3fd64.ClaimCard" role="Senior Backend Eng" company="Northvale Robotics" meta="$180–210k · remote" hint-size="100%,72px"></x-import>
+          </div>
+        </div>
+        <div>
+          <x-import component-from-global-scope="ProspectDesignSystem_c3fd64.StageColumnHead" name="Staked" count="18" hint-size="100%,28px"></x-import>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+            <x-import component-from-global-scope="ProspectDesignSystem_c3fd64.ClaimCard" role="Infra Engineer" company="Cobalt Systems" meta="staked 3d ago" hint-size="100%,64px"></x-import>
+          </div>
+        </div>
+        <div>
+                    <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+            <x-import component-from-global-scope="ProspectDesignSystem_c3fd64.ClaimCard" role="Full-Stack Eng" company="Tidewater Labs" meta="screen · Thu 2pm" hint-size="100%,64px"></x-import>
+          </div>
+        </div>
+        <div>
+          <x-import component-from-global-scope="ProspectDesignSystem_c3fd64.StageColumnHead" name="Vein" count="4" hint-size="100%,28px"></x-import>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+            <x-import component-from-global-scope="ProspectDesignSystem_c3fd64.ClaimCard" role="Staff Engineer" company="Granite Map Co." meta="onsite · Jun 26" hint-size="100%,64px"></x-import>
+          </div>
+        </div>
+        <div>
+          <x-import component-from-global-scope="ProspectDesignSystem_c3fd64.StageColumnHead" name="Strike" count="1" strike="{{ true }}" hint-size="100%,28px"></x-import>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+            <x-import component-from-global-scope="ProspectDesignSystem_c3fd64.ClaimCard" role="Senior Engineer" company="Lumen Foundry" meta="offer · $205k" strike="{{ true }}" hint-size="100%,64px"></x-import>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+</body>
+</html>

@@ -1,0 +1,8 @@
+{
+  "name": "prospect-capture-dev",
+  "private": true,
+  "description": "Dev-only test tooling for the Prospect Capture extension. Not shipped (see manifest.json / src/ for the actual extension).",
+  "devDependencies": {
+    "jsdom": "^24.0.0"
+  }
+}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Prospect Capture</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <main class="popup">
+    <header class="popup__header">
+      <span class="popup__title">Prospect</span>
+    </header>
+
+    <section id="idle" class="panel">
+      <p class="lede">Capture the job on this page.</p>
+      <button id="captureBtn" class="btn btn--primary">Stake this claim</button>
+      <button id="settingsToggle" class="btn btn--link">Endpoint settings</button>
+    </section>
+
+    <section id="settings" class="panel panel--hidden">
+      <label class="field-label" for="endpointInput">API endpoint</label>
+      <input id="endpointInput" class="text-input" type="text" spellcheck="false" />
+      <div class="row">
+        <button id="settingsSave" class="btn btn--primary">Save</button>
+        <button id="settingsCancel" class="btn btn--link">Cancel</button>
+      </div>
+      <p id="settingsStatus" class="status"></p>
+    </section>
+
+    <section id="loading" class="panel panel--hidden">
+      <p class="lede">Reading the page&hellip;</p>
+    </section>
+
+    <section id="review" class="panel panel--hidden">
+      <p class="lede">Confirm before staking:</p>
+      <dl id="fieldList" class="field-list"></dl>
+      <p id="longTailNote" class="status"></p>
+      <p id="missingNote" class="status status--warn"></p>
+      <div class="row">
+        <button id="confirmBtn" class="btn btn--primary">Confirm &amp; stake</button>
+        <button id="cancelBtn" class="btn btn--link">Cancel</button>
+      </div>
+    </section>
+
+    <section id="result" class="panel panel--hidden">
+      <p id="resultMessage" class="status"></p>
+      <button id="retryBtn" class="btn btn--primary panel--hidden">Retry</button>
+      <button id="doneBtn" class="btn btn--link">Close</button>
+    </section>
+
+    <section id="unsupported" class="panel panel--hidden">
+      <p class="status status--warn">This site isn't supported yet. Prospect currently captures LinkedIn job postings.</p>
+    </section>
+  </main>
+
+  <script src="../lib/config.js"></script>
+  <script src="../lib/capture.js"></script>
+  <script src="../adapters/registry.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
