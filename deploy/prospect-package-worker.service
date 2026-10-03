@@ -1,0 +1,20 @@
+[Unit]
+Description=Prospect deterministic application-package worker
+After=network.target prospect.service tower.service
+
+[Service]
+Type=simple
+WorkingDirectory=%h/prospect
+ExecStart=/usr/bin/node %h/prospect/server/packageWorker.js
+Environment=PROSPECT_DB_PATH=%h/prospect/data/prospect.db
+Environment=PROSPECT_PACKAGE_STAGING_ROOT=%h/prospect/data/application-generation
+Environment=CAREER_ARTIFACT_ROOT=%h/Vaults/career-vault/files
+Environment=TOWER_MCP_URL=http://127.0.0.1:8765/mcp
+Environment=PROSPECT_TOWER_TARGET_HOST=scalar
+Restart=always
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=default.target

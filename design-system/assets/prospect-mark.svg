@@ -1,0 +1,15 @@
+<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+<path d="M14,52 Q60,118 106,52" fill="#10171A"></path>
+<ellipse cx="60" cy="52" rx="46" ry="18" fill="#10171A"></ellipse>
+<path d="M32,49 Q60,40 88,49" fill="none" stroke="#6E767B" stroke-width="1.8" opacity="0.5"></path>
+<path d="M37,45.5 Q60,38 83,45.5" fill="none" stroke="#6E767B" stroke-width="1.8" opacity="0.4"></path>
+<ellipse cx="60" cy="52" rx="46" ry="18" fill="none" stroke="#E7E1D3" stroke-width="6" stroke-linecap="round"></ellipse>
+<path d="M14,52 Q60,118 106,52" fill="none" stroke="#E7E1D3" stroke-width="6" stroke-linecap="round"></path>
+<ellipse cx="60" cy="81" rx="16" ry="3" fill="#000" opacity="0.42"></ellipse>
+<circle cx="43" cy="74" r="1.7" fill="#CDA349"></circle>
+<circle cx="79" cy="75" r="1.6" fill="#CDA349"></circle>
+<polygon points="45,77 50,63 60,57.5 70,60 77,70 71,81 56,83" fill="#CDA349" stroke="#8F6E26" stroke-width="1.7" stroke-linejoin="round"></polygon>
+<polygon points="50,63 60,57.5 64,68 53,70.5" fill="#E2C06B"></polygon>
+<polygon points="70,60 77,70 71,81 63,69" fill="#A57E2C"></polygon>
+<circle cx="55" cy="64" r="2" fill="#F6E8B0"></circle>
+</svg>

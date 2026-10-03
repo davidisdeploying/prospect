@@ -1,0 +1,11 @@
+[Unit]
+Description=Run Prospect Scout Gmail importer every two hours
+
+[Timer]
+OnCalendar=*-*-* 00/2:35:00 America/Chicago
+Persistent=true
+RandomizedDelaySec=10m
+Unit=prospect-scout-gmail.service
+
+[Install]
+WantedBy=timers.target

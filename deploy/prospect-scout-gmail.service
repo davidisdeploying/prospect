@@ -1,0 +1,15 @@
+[Unit]
+Description=Prospect Scout read-only Gmail importer
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/prospect
+Environment=PROSPECT_DB_PATH=%h/prospect/data/prospect.db
+Environment=PROSPECT_GMAIL_CREDENTIALS=%h/prospect/data/scout-gmail/client_secret.json
+Environment=PROSPECT_GMAIL_TOKEN=%h/prospect/data/scout-gmail/token.json
+ExecStart=/usr/bin/node %h/prospect/scripts/scout-gmail.mjs run
+
+[Install]
+WantedBy=default.target

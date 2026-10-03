@@ -1,0 +1,36 @@
+<!-- @dsCard group="Components" viewport="700x230" name="Buttons & actions" subtitle="Gold (once per view), ghost, quiet, danger · icon button · sizes" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;background:var(--bg-base);padding:24px;font-family:var(--font-sans)}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:14px}</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { Button, IconButton } = window.ProspectDesignSystem_c3fd64;
+const Plus = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round"><path d="M12 5v14M5 12h14"/></svg>;
+const Dots = () => <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg>;
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <div>
+    <div className="row">
+      <Button variant="gold" iconLeft={<Plus/>}>Stake a claim</Button>
+      <Button variant="ghost">See the dig →</Button>
+      <Button variant="quiet">Cancel</Button>
+      <Button variant="danger">Move to tailings</Button>
+    </div>
+    <div className="row">
+      <Button variant="gold" size="sm">Small</Button>
+      <Button variant="ghost" size="md">Medium</Button>
+      <Button variant="ghost" size="lg">Large</Button>
+      <Button variant="ghost" disabled>Disabled</Button>
+      <IconButton label="More"><Dots/></IconButton>
+      <IconButton variant="gold" label="Add"><Plus/></IconButton>
+    </div>
+  </div>
+);
+</script>
+</body></html>
