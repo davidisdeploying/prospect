@@ -1,0 +1,19 @@
+<!-- @dsCard group="Spacing" viewport="700x150" name="Radii" subtitle="6 chips · 9 cards/buttons · 14 panels · 999 pills." -->
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../styles.css">
+<style>
+  body{margin:0;background:var(--bg-base);padding:24px 28px;font-family:var(--font-mono)}
+  .row{display:flex;gap:20px;align-items:flex-end}
+  .cell{display:flex;flex-direction:column;align-items:center;gap:8px}
+  .box{width:74px;height:62px;background:var(--surface-card);border:1px solid var(--line)}
+  .lbl{font-size:11px;color:var(--quartz)}
+  .sub{font-size:10px;color:var(--galena)}
+</style></head>
+<body>
+  <div class="row">
+    <div class="cell"><div class="box" style="border-radius:var(--r-sm)"></div><div class="lbl">6px</div><div class="sub">chip</div></div>
+    <div class="cell"><div class="box" style="border-radius:var(--r-md)"></div><div class="lbl">9px</div><div class="sub">card · button</div></div>
+    <div class="cell"><div class="box" style="border-radius:var(--r-lg)"></div><div class="lbl">14px</div><div class="sub">panel · dialog</div></div>
+    <div class="cell"><div class="box" style="border-radius:var(--r-pill);width:62px;height:62px"></div><div class="lbl">999px</div><div class="sub">pill · avatar</div></div>
+  </div>
+</body></html>

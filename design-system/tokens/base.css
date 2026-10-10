@@ -1,0 +1,64 @@
+/* ============================================================
+   Prospect — Base element styling + utility primitives
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { margin: 0; }
+
+body {
+  background: var(--bg-base);
+  color: var(--text-body);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* The faint vertical claim-rule the landing page uses — pannning grid */
+.prospect-field {
+  background-image:
+    repeating-linear-gradient(90deg, transparent 0 119px, rgba(110,118,123,.05) 119px 120px);
+}
+
+h1, h2, h3 {
+  font-family: var(--font-slab);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-display);
+  line-height: var(--lh-tight);
+  margin: 0;
+  color: var(--text-strong);
+}
+
+a { color: inherit; }
+
+/* Mono helper */
+.mono { font-family: var(--font-mono); }
+
+/* Eyebrow — mono caps, the recurring section label */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-eyebrow);
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Focus ring — gold, always. The ring lands: offset eases in from 4px to
+   its 2px rest under no-preference motion; reduced motion keeps the ring
+   fully present, just static (focus is never animation-dependent). */
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes focus-ring-land {
+    from { outline-offset: 4px; }
+    to   { outline-offset: 2px; }
+  }
+  :focus-visible {
+    animation: focus-ring-land var(--dur-flick) var(--ease-settle) both;
+  }
+}

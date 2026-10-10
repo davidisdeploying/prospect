@@ -1,0 +1,20 @@
+{
+  "name": "prospect-server",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node index.js",
+    "start": "node index.js",
+    "test": "node --test test/"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.10.0",
+    "docx": "^9.7.1",
+    "express": "^4.21.2",
+    "pdfkit": "^0.20.1",
+    "sqlite-vec": "^0.1.9",
+    "yaml": "^2.9.0"
+  }
+}

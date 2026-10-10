@@ -1,0 +1,95 @@
+/* ============================================================
+   Prospect — Color tokens
+   Dark mineral base · one scarce gold accent · mineral support.
+   Named for the mineral, used for the role. No off-palette colors.
+   ============================================================ */
+
+:root {
+  /* --- Raw mineral palette ------------------------------------ */
+  --wet-slate:    #1B2327;  /* base background — panning happens in water */
+  --placer-gold:  #CDA349;  /* the scarce accent. One per view. */
+  --verdigris:    #4C8C78;  /* secondary positive / "rich" (oxidized copper) */
+  --iron-oxide:   #A14B33;  /* dead / tailings / destructive (rust) */
+  --quartz:       #E7E1D3;  /* ink + primary text (host rock of gold veins) */
+  --galena:       #6E767B;  /* muted lines, dividers, secondary text (lead ore) */
+
+  /* Gold tints for nugget / accent gradients */
+  --gold-hi:      #E2C06B;  /* highlight facet */
+  --gold-sh:      #A57E2C;  /* shadow facet */
+  --gold-edge:    #8F6E26;  /* faceted edge / stroke */
+  --gold-glint:   #F6E8B0;  /* specular glint */
+
+  /* --- Surface ramp (slate, darkened/lightened) -------------- */
+  --slate-900:    #10171A;  /* deepest recess — board well, sunk panels */
+  --slate-850:    #161E22;
+  --slate-800:    #1B2327;  /* = wet-slate, app base */
+  --slate-750:    #212B2F;  /* raised panel / card */
+  --slate-700:    #283338;  /* hover-raised */
+  --line:         #2E383C;  /* hairline divider on dark */
+  --galena-dim:   #3A4448;  /* dashed wells, faint structural lines */
+
+  /* --- Quartz ramp (text on dark) ---------------------------- */
+  --quartz-100:   #F3EFE6;  /* brightest ink */
+  --quartz-200:   #E7E1D3;  /* = quartz, primary text */
+  --quartz-300:   #CFD4D0;  /* lede / softened body */
+  --quartz-400:   #9AA1A4;  /* tertiary metric text */
+
+  /* --- Semantic surface aliases ------------------------------ */
+  --bg-base:       var(--slate-800);
+  --bg-sunken:     var(--slate-900);   /* boards, wells, recesses */
+  --surface-card:  var(--slate-750);
+  --surface-raised:var(--slate-700);
+  --border-hair:   var(--line);
+  --border-dashed: var(--galena-dim);
+
+  /* --- Semantic text aliases --------------------------------- */
+  --text-strong:   var(--quartz-100);
+  --text-body:     var(--quartz-200);
+  --text-soft:     var(--quartz-300);
+  --text-muted:    var(--galena);
+  --text-faint:    var(--quartz-400);
+  --text-on-gold:  #1C1A12;  /* ink over a gold fill */
+
+  /* --- Semantic accent / state aliases ----------------------- */
+  --accent:            var(--placer-gold);   /* THE scarce accent */
+  --accent-hover:      var(--gold-hi);
+  --accent-press:      var(--gold-sh);
+  --accent-edge:       var(--gold-edge);
+  --accent-wash:       rgba(205,163,73,.14); /* gold tint fill on cards */
+  --accent-wash-soft:  rgba(205,163,73,.06);
+
+  --positive:      var(--verdigris);         /* "rich" / advancing states */
+  --positive-wash: rgba(76,140,120,.14);
+  --danger:        var(--iron-oxide);        /* tailings / destructive */
+  --danger-wash:   rgba(161,75,51,.14);
+
+  /* --- Focus ring -------------------------------------------- */
+  --focus-ring:    var(--placer-gold);
+}
+
+/* ============================================================
+   Light surface swap — Quartz rim/text flips to Wet Slate;
+   the recess shadow and Galena lines hold on both.
+   Apply with class="on-light" on a light container.
+   ============================================================ */
+.on-light {
+  --bg-base:       #F4F1E9;  /* quartz-paper */
+  --bg-sunken:     #E9E4D7;
+  --surface-card:  #FBF9F3;
+  --surface-raised:#FFFFFF;
+  --border-hair:   #D8D2C2;
+  --border-dashed: #C4BCA8;
+
+  --text-strong:   var(--slate-900);
+  --text-body:     var(--wet-slate);
+  --text-soft:     #3A4448;
+  --text-muted:    var(--galena);
+  --text-faint:    #8A8F8C;
+  --text-on-gold:  #1C1A12;
+
+  --accent-wash:      rgba(205,163,73,.18);
+  --accent-wash-soft: rgba(205,163,73,.10);
+
+  color: var(--text-body);
+  background: var(--bg-base);
+}

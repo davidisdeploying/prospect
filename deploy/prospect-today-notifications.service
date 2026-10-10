@@ -1,0 +1,13 @@
+[Unit]
+Description=Prospect Today deadline and Nugget push dispatcher
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/prospect
+Environment=PROSPECT_DB_PATH=%h/prospect/data/prospect.db
+ExecStart=/usr/bin/node %h/prospect/scripts/today-notifications.mjs run
+
+[Install]
+WantedBy=default.target
