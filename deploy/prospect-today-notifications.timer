@@ -1,0 +1,13 @@
+[Unit]
+Description=Run Prospect Today notification dispatcher
+
+[Timer]
+OnCalendar=*-*-* 08:30:00 America/Chicago
+OnCalendar=*-*-* 12:30:00 America/Chicago
+OnCalendar=*-*-* 17:30:00 America/Chicago
+Persistent=true
+RandomizedDelaySec=5m
+Unit=prospect-today-notifications.service
+
+[Install]
+WantedBy=timers.target

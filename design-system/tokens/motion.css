@@ -1,0 +1,755 @@
+/* ============================================================
+   Prospect — Motion tokens, reduced-motion architecture,
+   and shared craft-layer primitives.
+   See ~/Vaults/prospect-vault/design-motion.md (locked doctrine).
+   ============================================================ */
+
+:root {
+  /* --- Durations — flip to near-zero under reduced motion (see below) */
+  --dur-flick:  120ms;  /* hover, press, focus micro-states */
+  --dur-state:  180ms;  /* toggles, chips, color/opacity state */
+  --dur-move:   280ms;  /* short spatial travel (drawer, toast, popover) */
+  --dur-move-exit: calc(var(--dur-move) * 0.7); /* leaving is faster than arriving — §5.8 */
+  --dur-scene:  480ms;  /* view transitions: card glide, route change */
+  --dur-strike: 720ms;  /* the Paydirt celebration ONLY */
+  --dur-fade:   120ms;  /* reduced-motion crossfade — never zeroed */
+
+  /* --- Easings — all monotonic, no overshoot anywhere in the app */
+  --ease-settle: linear(0, 0.3 12%, 0.55 24%, 0.73 37%, 0.85 50%, 0.93 64%, 0.975 80%, 1); /* sediment landing */
+  --ease-sluice: cubic-bezier(0.16, 1, 0.3, 1);   /* fast out of the gate, long calm tail */
+  --ease-pan:    cubic-bezier(0.45, 0, 0.15, 1);  /* gentle S — sweeps, route fades */
+  --ease-sink:   cubic-bezier(0.55, 0, 1, 0.45);  /* gravity ease-in — Tailings, dismissals */
+
+  /* --- Travel */
+  --rise:    8px;  /* standard entrance travel */
+  --lift:    2px;  /* hover lift */
+  --stagger: 32ms; /* per-item cascade step, cap total <= 600ms */
+}
+
+/* Rules: durations/easings come ONLY from these tokens (no literals in
+   components). New motion needs a token or reuses one. */
+
+/* --- Reduced motion — architecture, not patchwork (token flip) -------- */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-flick: 0ms;
+    --dur-state: 0ms;
+    --dur-move: 0ms;
+    --dur-scene: 0ms;
+    --dur-strike: 0ms;
+    --rise: 0px;
+    --lift: 0px;
+    --stagger: 0ms;
+  }
+
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 0.01ms !important;
+  }
+
+  /* Meaningful state changes still keep a perceivable --dur-fade crossfade
+     (never zeroed) instead of popping silently. */
+  .settle-in,
+  .sink-out {
+    transition-property: opacity;
+    transition-duration: var(--dur-fade);
+    transition-timing-function: linear;
+  }
+}
+
+/* ============================================================
+   Shared craft-layer primitives (§9). All four defined here as
+   foundations for later M-phases; M1 wires only .settle-in and
+   .sink-out (the toast). .glint and the strata keyframe are
+   defined but not triggered anywhere in M1.
+   ============================================================ */
+
+/* Entrance: fades + rises into place, sediment settling.
+   @starting-style-driven so it plays automatically on mount with
+   no JS timer, and degrades to an instant appearance wherever
+   @starting-style is unsupported. */
+.settle-in {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity var(--dur-move) var(--ease-settle),
+              transform var(--dur-move) var(--ease-settle);
+}
+@starting-style {
+  .settle-in {
+    opacity: 0;
+    transform: translateY(var(--rise));
+  }
+}
+
+/* Exit / loss: gravity takes it down, desaturates, fades.
+   Drop this class on an already-mounted element to animate it out;
+   the element must stay mounted for --dur-move before removal. */
+.sink-out {
+  transition: opacity var(--dur-move) var(--ease-sink),
+              transform var(--dur-move) var(--ease-sink),
+              filter var(--dur-move) var(--ease-sink);
+  opacity: 0;
+  transform: translateY(var(--rise));
+  filter: saturate(0.6) brightness(0.85);
+}
+
+/* One-shot masked gold sweep — the single gold-motion moment per
+   view per action. Not triggered in M1 (no per-view gold-motion
+   moment ships yet); foundation for §3.2/§3.5. */
+.glint {
+  position: relative;
+  overflow: hidden;
+}
+.glint::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    transparent 30%,
+    color-mix(in oklab, var(--placer-gold) 35%, transparent) 50%,
+    transparent 70%
+  );
+  background-size: 220% 100%;
+  background-position: 130% 0;
+  animation: glint-sweep var(--dur-scene) var(--ease-sluice) 1 forwards;
+}
+@keyframes glint-sweep {
+  from { background-position: 130% 0; }
+  to   { background-position: -30% 0; }
+}
+
+/* ============================================================
+   §3.2 Spatial continuity — the claim travels (M3). Same-document
+   View Transitions on select-driven stage moves: the card physically
+   glides column→column and settles; forward moves land with a single
+   masked gold glint on the destination column head (the view's one
+   gold-motion moment); Tailings moves get a pre-glide gravity sink
+   instead, no glint. Structural rules apply unconditionally so a
+   browser without View Transitions just gets the plain state swap
+   from viewTransitions.js's feature-detect fallback.
+   ============================================================ */
+::view-transition-group(*) {
+  animation-duration: var(--dur-scene);
+  animation-timing-function: var(--ease-settle);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .column-head {
+    position: relative;
+    overflow: hidden;
+  }
+  /* Reuses the .glint gradient recipe (§ primitives above) so the look
+     is identical — this wires the primitive to the arrival signal via
+     :has(), it doesn't invent a new one. */
+  .column-head:has(+ .cards .card[data-arrived])::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      100deg,
+      transparent 30%,
+      color-mix(in oklab, var(--placer-gold) 35%, transparent) 50%,
+      transparent 70%
+    );
+    background-size: 220% 100%;
+    background-position: 130% 0;
+    animation: glint-sweep var(--dur-scene) var(--ease-sluice) 1 forwards;
+  }
+
+  .card[data-sinking] {
+    transform: translateY(4px);
+    filter: saturate(0.6) brightness(0.85);
+    transition: transform var(--dur-state) var(--ease-sink),
+                filter var(--dur-state) var(--ease-sink);
+  }
+}
+
+/* ClaimCard hover — compositor-only overlay (M8). The most-repeated
+   interactive unit on the board (every card, every column) is the one
+   surface the §4/§8 amendment keeps exempt from the discrete-affordance
+   paint exception: border-color + box-shadow deepen is pre-painted onto a
+   `::after` at rest (opacity 0) and cross-faded to opacity 1 on hover — no
+   paint triggered on hover, only compositing. Rides --dur-flick like every
+   other hover affordance, so it collapses to instant (not hidden) under
+   reduced motion. z-index: -1 sits it under the card's own content within
+   the stacking context .claim-card's own `contain: content` establishes. */
+.claim-card {
+  position: relative;
+}
+.claim-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: var(--r-md);
+  border: 1px solid var(--galena-dim);
+  box-shadow: var(--shadow-pop);
+  opacity: 0;
+  transition: opacity var(--dur-flick) var(--ease-sluice);
+}
+.claim-card--strike::after {
+  border-color: var(--accent);
+}
+.claim-card--interactive:hover::after {
+  opacity: 1;
+}
+
+/* ============================================================
+   §3.6 Paydirt — the Strike celebration (M6). App.jsx guards this to
+   "once per claim, ever" via a post-move GET /api/claims/:id history
+   count (no board-level signal exists) and only ever adds a claim id
+   to its paydirtIds set on that true first-ever Strike landing — the
+   wrap/ring/mark below simply render off that set membership, once.
+   Compositor-only by construction (transform/opacity on the bloom
+   ring, stroke-dashoffset on the tiny fixed-size arc icon): no
+   box-shadow animation is used, so the §3.6 "@property --ring-spread"
+   exception isn't needed here. The RESTING ring is a plain, unanimated
+   box-shadow on a wrapper `<div>` around the ClaimCard rather than on
+   ClaimCard's own root — ClaimCard's hover handlers imperatively
+   overwrite their own root's boxShadow (see ClaimCard.jsx), which
+   would otherwise clobber a resting gold shadow on first hover.
+   ============================================================ */
+.paydirt-wrap {
+  position: relative;
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-strike);
+}
+
+.paydirt-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r-md);
+  pointer-events: none;
+  border: 2px solid var(--placer-gold);
+  opacity: 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .paydirt-ring {
+    animation: paydirt-bloom var(--dur-strike) var(--ease-settle) 1 forwards;
+  }
+}
+@keyframes paydirt-bloom {
+  0%   { opacity: .95; transform: scale(.3); }
+  55%  { opacity: .5;  transform: scale(1.12); }
+  100% { opacity: 0;   transform: scale(1.3); }
+}
+
+/* The pickaxe-head gold arc (PaydirtMark.jsx, inlined from
+   design-system/assets/prospect-mark-pick.svg — the only strokeable
+   gold mark; the mark is otherwise only ever consumed as an <img>).
+   Base rule draws it fully (legible with zero animation support);
+   the animated draw is a no-preference-gated enhancement layered on
+   top, same architecture as §3.4's strata reveal. */
+.paydirt-arc {
+  stroke-dasharray: 80;
+  stroke-dashoffset: 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .paydirt-arc {
+    stroke-dashoffset: 80;
+    animation: paydirt-arc-draw var(--dur-strike) var(--ease-sluice) 1 forwards;
+  }
+}
+@keyframes paydirt-arc-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+/* ============================================================
+   §3.7 Ghost dust — quiet-claim ambience (M6). Applied via
+   className on the ClaimCard root (ghost candidates only, Staked +
+   quietDays >= 14). ≤3% opacity delta, 6s loop, no per-card stagger
+   so every ghost card on the board shares one identical drift
+   (the board's ONE ambient loop) rather than several competing ones.
+   ============================================================ */
+.ghost-dust {
+  position: relative;
+  overflow: hidden;
+}
+.ghost-dust::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(0deg, color-mix(in oklab, var(--galena) 30%, transparent) 0 1px, transparent 1px 22px),
+    repeating-linear-gradient(90deg, color-mix(in oklab, var(--galena) 20%, transparent) 0 1px, transparent 1px 22px);
+  opacity: .01;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .ghost-dust::before {
+    animation: ghost-dust-drift 6s ease-in-out infinite;
+  }
+}
+@keyframes ghost-dust-drift {
+  0%, 100% { opacity: .01; transform: translateY(0); }
+  50%      { opacity: .03; transform: translateY(-2px); }
+}
+
+/* Strata deposit — append-only history layers depositing bottom-up.
+   Foundation for §3.4; not wired in M1. */
+@keyframes strata-deposit {
+  from {
+    opacity: 0;
+    transform: translateY(var(--rise));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   §3.5 Stake driven — native <dialog> + ::backdrop choreography
+   (M2). The <dialog> element IS the panel (no wrapper div); the
+   UA-generated ::backdrop replaces the old inline scrim. Structural
+   rules apply unconditionally so an unsupporting browser still
+   shows/hides the dialog instantly and fully usable; the
+   @starting-style/allow-discrete transition is the enhancement.
+   ============================================================ */
+.ds-dialog {
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-pop);
+  background: var(--surface-card);
+  color: inherit;
+  overflow: hidden;
+  max-height: 90vh;
+}
+.ds-dialog::backdrop {
+  background: rgba(16, 23, 26, .72);
+  backdrop-filter: blur(3px);
+}
+
+@supports (transition-behavior: allow-discrete) {
+  /* Closed / exit-target state — driven at --dur-move-exit (0.7x). */
+  .ds-dialog {
+    opacity: 0;
+    transform: translateY(var(--rise)) scale(0.985);
+    transition: opacity var(--dur-move-exit) var(--ease-settle),
+                transform var(--dur-move-exit) var(--ease-settle),
+                display var(--dur-move-exit) allow-discrete,
+                overlay var(--dur-move-exit) allow-discrete;
+  }
+  /* Open state — entering at --dur-move. */
+  .ds-dialog[open] {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    transition: opacity var(--dur-move) var(--ease-settle),
+                transform var(--dur-move) var(--ease-settle),
+                display var(--dur-move) allow-discrete,
+                overlay var(--dur-move) allow-discrete;
+  }
+  @starting-style {
+    .ds-dialog[open] {
+      opacity: 0;
+      transform: translateY(var(--rise)) scale(0.985);
+    }
+  }
+
+  .ds-dialog::backdrop {
+    background: rgba(16, 23, 26, 0);
+    backdrop-filter: blur(0px);
+    transition: background-color var(--dur-move-exit) var(--ease-settle),
+                backdrop-filter var(--dur-move-exit) var(--ease-settle),
+                display var(--dur-move-exit) allow-discrete,
+                overlay var(--dur-move-exit) allow-discrete;
+  }
+  .ds-dialog[open]::backdrop {
+    background: rgba(16, 23, 26, .72);
+    backdrop-filter: blur(3px);
+    transition: background-color var(--dur-move) var(--ease-settle),
+                backdrop-filter var(--dur-move) var(--ease-settle),
+                display var(--dur-move) allow-discrete,
+                overlay var(--dur-move) allow-discrete;
+  }
+  @starting-style {
+    .ds-dialog[open]::backdrop {
+      background: rgba(16, 23, 26, 0);
+      backdrop-filter: blur(0px);
+    }
+  }
+
+  /* Reduced motion: --dur-move/--dur-move-exit already flip to 0 via the
+     top-level token override, but `scale(0.985)` above is a literal (not
+     token-derived) so it's neutralised explicitly here. display/overlay
+     stay in the transition list (still allow-discrete, still gated in
+     this @supports block) so the dialog stays mounted/visible through
+     the --dur-fade window instead of vanishing before the crossfade can
+     render — appear/disappear stays perceivable, never a silent pop,
+     never a stuck-open dialog. Nested last so it wins the cascade over
+     the rules above for browsers with both allow-discrete support and
+     the reduced-motion preference. */
+  @media (prefers-reduced-motion: reduce) {
+    .ds-dialog,
+    .ds-dialog[open] {
+      transform: none;
+      transition: opacity var(--dur-fade) linear,
+                  display var(--dur-fade) allow-discrete,
+                  overlay var(--dur-fade) allow-discrete;
+    }
+    .ds-dialog::backdrop,
+    .ds-dialog[open]::backdrop {
+      transition: background-color var(--dur-fade) linear,
+                  display var(--dur-fade) allow-discrete,
+                  overlay var(--dur-fade) allow-discrete;
+    }
+  }
+}
+
+.ds-dialog-title {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-slab);
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--text-strong);
+}
+.ds-dialog-body {
+  padding: 20px;
+}
+.ds-dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 14px 20px;
+  border-top: 1px solid var(--line);
+  background: var(--bg-sunken);
+}
+
+/* §4 craft layer — Tooltip: minimal opacity-only fade-in on show.
+   Mounts fresh each time it appears (conditionally rendered), so
+   @starting-style fires on every reveal with no allow-discrete
+   needed. No exit motion — unmounts instantly on hide (in scope
+   only for the entrance per M2). */
+.ds-tooltip-fade {
+  opacity: 1;
+  transition: opacity var(--dur-state) var(--ease-settle);
+}
+@starting-style {
+  .ds-tooltip-fade {
+    opacity: 0;
+  }
+}
+
+/* ============================================================
+   §3.3 Descend the shaft — ClaimDetail centered modal (M4). ClaimDetail
+   is a plain overlay <div> (not the native <dialog> from §3.5
+   above) — it truly mounts/unmounts via React rather than toggling
+   `display`, so @starting-style needs no allow-discrete gating
+   here; the .ds-dialog choreography above is this section's
+   PATTERN, not something it extends. Three layers, three
+   velocities = depth: scrim, panel, content (+40ms).
+   ============================================================ */
+.claim-scrim {
+  opacity: 1;
+  backdrop-filter: brightness(0.7) blur(2px);
+  transition: opacity var(--dur-move) var(--ease-sluice),
+              backdrop-filter var(--dur-move) var(--ease-sluice);
+}
+@starting-style {
+  .claim-scrim {
+    opacity: 0;
+    backdrop-filter: brightness(1) blur(0px);
+  }
+}
+.claim-scrim.is-closing {
+  opacity: 0;
+  backdrop-filter: brightness(1) blur(0px);
+  transition: opacity var(--dur-move-exit) var(--ease-sluice),
+              backdrop-filter var(--dur-move-exit) var(--ease-sluice);
+}
+
+.claim-panel {
+  transform: translateY(0) scale(1);
+  transition: transform var(--dur-move) var(--ease-sluice);
+}
+@starting-style {
+  .claim-panel {
+    transform: translateY(12px) scale(0.985);
+  }
+}
+.claim-panel.is-closing {
+  transform: translateY(12px) scale(0.985);
+  transition: transform var(--dur-move-exit) var(--ease-sluice);
+}
+
+/* Content follows the panel by 40ms (§3.3's explicit offset — same class
+   of doctrine-mandated literal as .ds-dialog's scale(0.985) above) at the
+   settle curve, giving it a distinct velocity from the panel it rides in. */
+.claim-content {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity var(--dur-move) var(--ease-settle) 40ms,
+              transform var(--dur-move) var(--ease-settle) 40ms;
+}
+@starting-style {
+  .claim-content {
+    opacity: 0;
+    transform: translateY(var(--rise));
+  }
+}
+.claim-content.is-closing {
+  opacity: 0;
+  transform: translateY(var(--rise));
+  transition: opacity var(--dur-move-exit) var(--ease-settle),
+              transform var(--dur-move-exit) var(--ease-settle);
+}
+
+/* Core-sample reveal on the verbatim-snapshot box: top-to-bottom clip.
+   Gated so an unsupporting browser never sees the rule at all — the box
+   keeps its plain inline styles and is fully visible unconditionally. */
+@supports (clip-path: inset(0)) {
+  .claim-snapshot {
+    clip-path: inset(0 0 0% 0);
+    transition: clip-path var(--dur-move) var(--ease-sluice) 40ms;
+  }
+  @starting-style {
+    .claim-snapshot {
+      clip-path: inset(0 0 100% 0);
+    }
+  }
+  .claim-snapshot.is-closing {
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path var(--dur-move-exit) var(--ease-sluice);
+  }
+}
+
+/* ============================================================
+   §3.4 Strata — the append-only history. Base state is ALWAYS
+   fully visible (opacity 1 / no transform) with no @supports
+   requirement at all — motion below is a pure enhancement layered
+   on top, never the thing that reveals a row. Rows are never
+   reordered by anything in this file; ClaimDetail.jsx renders the
+   server's ASC order untouched, so "deposit" here only ever means
+   an opacity/transform reveal, never a DOM move.
+   ============================================================ */
+.claim-strata-layer {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* No animation-timeline(view) support: staggered mount transition.
+   ClaimDetail.jsx sets --claim-strata-delay inline ONLY on the rows
+   present at first mount (oldest-first, index-based, capped 600ms per
+   §2); a row appended later has no var set, falls through to the 0ms
+   fallback below, and gets a single immediate settle instead of
+   replaying the cascade. */
+@supports not (animation-timeline: view()) {
+  .claim-strata-layer {
+    transition: opacity var(--dur-move) var(--ease-settle) var(--claim-strata-delay, 0ms),
+                transform var(--dur-move) var(--ease-settle) var(--claim-strata-delay, 0ms);
+  }
+  @starting-style {
+    .claim-strata-layer {
+      opacity: 0;
+      transform: translateY(var(--rise));
+    }
+  }
+}
+
+/* Long histories: scroll-linked reveal keyed off the panel's own
+   scrollport (.claim-panel is the overflow:auto container). Rows already
+   in view when the drawer opens resolve at/near their end state
+   immediately; rows below the fold play strata-deposit as they scroll
+   into range — the "long history" case falls out of the timeline itself,
+   no extra JS bookkeeping needed. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .claim-strata-layer {
+      animation: strata-deposit var(--dur-move) var(--ease-settle) both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+    }
+  }
+}
+
+/* Reduced motion: token flip alone would zero every duration above with
+   no perceivable crossfade (a silent snap) — mirrors .settle-in/.sink-out
+   and .ds-dialog's own local override above. Placed after every rule this
+   touches so normal cascade order (not specificity) gives it the win.
+   transform/backdrop-filter/clip-path snap to their rest values (nothing
+   was ever hidden behind them); opacity keeps a --dur-fade crossfade,
+   never zeroed. */
+@media (prefers-reduced-motion: reduce) {
+  .claim-scrim {
+    backdrop-filter: brightness(0.7) blur(2px);
+    transition: opacity var(--dur-fade) linear;
+  }
+  .claim-scrim.is-closing {
+    opacity: 0;
+  }
+
+  .claim-panel {
+    transform: none;
+    transition: none;
+  }
+  .claim-panel.is-closing {
+    transform: none;
+  }
+
+  .claim-content {
+    transform: none;
+    transition: opacity var(--dur-fade) linear;
+  }
+  .claim-content.is-closing {
+    opacity: 0;
+  }
+
+  .claim-snapshot {
+    transition: none;
+  }
+
+  .claim-strata-layer {
+    transition: none;
+    animation: none;
+  }
+}
+
+/* ============================================================
+   §3.9 Navigation & shell (M5). Cross-document View Transitions
+   between `/` (this SPA) and the server-rendered `/report` — the
+   2-page topology means direction is static per document, no JS
+   needed. Per the View Transitions spec, the pseudo-element tree
+   for a cross-document transition is styled from the INCOMING
+   document's stylesheet only (the outgoing document is already
+   torn down), so this file's old(root)/new(root) rules govern
+   Ascend navigations (/report -> /, where / is incoming) and
+   /report's own inline STYLE carries the mirror rules for Descend
+   (/ -> /report). Base nav chrome (below) is unconditionally
+   visible with no gate; only the morph/drift is the enhancement —
+   a browser without View Transitions just does a plain navigation.
+   ============================================================ */
+@view-transition {
+  navigation: auto;
+}
+
+@keyframes vt-root-out-down {
+  to { opacity: 0; transform: translateY(var(--rise)); }
+}
+@keyframes vt-root-in-from-above {
+  from { opacity: 0; transform: translateY(calc(-1 * var(--rise))); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Ascend (/report -> /): the outgoing /report content sinks down + fades,
+     the arriving / content drifts in from above. */
+  ::view-transition-old(root) {
+    animation: vt-root-out-down var(--dur-move) var(--ease-pan) both;
+  }
+  ::view-transition-new(root) {
+    animation: vt-root-in-from-above var(--dur-move) var(--ease-pan) both;
+  }
+}
+/* Reduced motion needs no local override here: the existing top-of-file rule
+   (`::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*)
+   { animation-duration: 0.01ms !important; }`) already covers root, and the
+   @media(no-preference) gate above means these keyframes never register at all
+   under reduced motion — the browser's default crossfade (near-instant) applies. */
+
+/* Active-nav indicator — a small non-gold verdigris rail. Base rule (below)
+   is unconditional: geometry + colors apply with no @supports/@media gate, so
+   the correct item is always marked whether or not View Transitions exist.
+   The SAME view-transition-name on both documents' active indicator is what
+   makes the browser morph/slide it across the cross-document navigation —
+   pure emergent behavior, no extra CSS needed for the slide itself. Its
+   ::view-transition-group(nav-active-indicator) inherits the existing
+   `::view-transition-group(*) { animation-duration: var(--dur-scene); ... }`
+   rule above (§3.2) rather than inventing new timing. */
+.nav-item {
+  position: relative;
+}
+.nav-indicator {
+  position: absolute;
+  left: -1px;
+  top: 6px;
+  bottom: 6px;
+  width: 3px;
+  border-radius: 0 2px 2px 0;
+  background: var(--verdigris);
+  opacity: 0;
+}
+.nav-indicator.is-active {
+  opacity: 1;
+}
+
+/* §3.1 Survey the field — board entrance, once per session. ClaimMap.jsx
+   adds `.survey-cascade` to the board root ONLY on the first mount of a
+   session (sessionStorage flag `prospect.surveyed`); every later mount
+   (including a fresh `/` load after visiting /report, since that's a full
+   cross-document reload) finds the flag already set and renders at rest —
+   no class, no @starting-style match, elements just paint visible
+   immediately. Column heads carry `--col-index`; cards carry `--col-index`/
+   `--row-index` (ClaimMap.jsx), so the delay math lives here per §2 (tokens
+   only, no literals in components) and stays capped at 600ms via min(). */
+@media (prefers-reduced-motion: no-preference) {
+  .survey-cascade .column-head {
+    clip-path: inset(0 0 0 0);
+    transition-property: clip-path;
+    transition-duration: var(--dur-state);
+    transition-timing-function: var(--ease-pan);
+    transition-delay: min(600ms, calc(var(--col-index, 0) * var(--stagger)));
+  }
+  @starting-style {
+    .survey-cascade .column-head {
+      clip-path: inset(0 100% 0 0);
+    }
+  }
+
+  .survey-cascade .card {
+    opacity: 1;
+    transform: translateY(0);
+    transition-property: opacity, transform;
+    transition-duration: var(--dur-move);
+    transition-timing-function: var(--ease-settle);
+    transition-delay: min(600ms, calc(var(--col-index, 0) * 3 * var(--stagger) + var(--row-index, 0) * var(--stagger)));
+  }
+  @starting-style {
+    .survey-cascade .card {
+      opacity: 0;
+      transform: translateY(var(--rise));
+    }
+  }
+}
+/* Reduced motion: no local override needed — the top-of-file token flip
+   zeroes --dur-state/--dur-move/--stagger/--rise, collapsing every
+   transition above to an instant, unclipped, untranslated snap (same
+   pattern as .settle-in/.sink-out). */
+
+/* Survey-rule texture + parallax — a faint, felt-not-seen mineral/grid
+   texture behind the whole shell. `body::before` so it needs no markup
+   change and no stacking fight with AppShell's own content (which paints
+   as a normal, non-negative-z-index descendant of body, i.e. on top).
+   AppShell.jsx's root grid div carries no background of its own (removed;
+   body's identical --bg-base shows through) so this is visible in the
+   gaps around cards/columns. Static by default; the scroll-linked drift is
+   a gated enhancement (native scroll-driven animations can't read raw
+   scrollY, only 0-100% of the scroll range, so "<=0.5x" is honored as a
+   subtle bounded-magnitude drift rather than a literal pixel ratio). */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    repeating-linear-gradient(0deg, color-mix(in oklab, var(--galena) 20%, transparent) 0 1px, transparent 1px 96px),
+    repeating-linear-gradient(90deg, color-mix(in oklab, var(--galena) 14%, transparent) 0 1px, transparent 1px 96px);
+  opacity: .22;
+}
+@keyframes survey-texture-drift {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-48px); }
+}
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    body::before {
+      animation: survey-texture-drift linear both;
+      animation-timeline: scroll(root block);
+    }
+  }
+}

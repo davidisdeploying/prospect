@@ -1,0 +1,42 @@
+/* ============================================================
+   Prospect — Spacing, radii, borders, shadows
+   ============================================================ */
+
+:root {
+  /* --- Spacing scale (4px base) ------------------------------ */
+  --sp-1:   4px;
+  --sp-2:   8px;
+  --sp-3:   12px;
+  --sp-4:   16px;
+  --sp-5:   20px;
+  --sp-6:   24px;
+  --sp-8:   32px;
+  --sp-10:  40px;
+  --sp-12:  48px;
+  --sp-16:  64px;
+  --sp-20:  80px;
+
+  /* --- Radii ------------------------------------------------- */
+  --r-sm:   6px;   /* chips, stamps, small controls */
+  --r-md:   9px;   /* cards, inputs, buttons */
+  --r-lg:   14px;  /* panels, boards, dialogs */
+  --r-pill: 999px; /* status chips, avatars */
+
+  /* --- Border widths ----------------------------------------- */
+  --bw-hair:  1px;
+  --bw-accent:1.7px;  /* faceted gold edge */
+
+  /* --- Elevation / shadow ------------------------------------ */
+  /* Recess: panels read as wells sunk into the slate. */
+  --shadow-well:   inset 0 1px 0 rgba(0,0,0,.35), 0 1px 0 rgba(231,225,211,.03);
+  --shadow-card:   0 8px 24px -16px rgba(0,0,0,.7);
+  --shadow-panel:  0 24px 60px -30px #000;
+  --shadow-pop:    0 18px 44px -18px rgba(0,0,0,.8);
+
+  /* Gold glow — used ONLY on the single accented element */
+  --shadow-strike: 0 0 0 1px var(--gold-sh), 0 10px 30px -14px rgba(205,163,73,.5);
+
+  /* --- Layout ------------------------------------------------ */
+  --container:  1160px;
+  --gutter:     28px;
+}
